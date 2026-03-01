@@ -69,17 +69,12 @@ describe('MCP Server E2E Tests', () => {
 
     const exitCode = await new Promise<number>((resolve) => {
       proc.on('close', resolve);
-      // Send an init request to trigger the error
-      proc.stdin!.write(JSON.stringify({
-        jsonrpc: '2.0', id: 1, method: 'initialize',
-        params: { protocolVersion: '2024-11-05', capabilities: {}, clientInfo: { name: 'test', version: '1.0' } },
-      }) + '\n');
-      // Give it time to fail
-      setTimeout(() => { proc.kill(); resolve(1); }, 5000);
+      // Server should exit immediately without an API key
+      setTimeout(() => { proc.kill(); resolve(-1); }, 3000);
     });
 
-    // Either exits with error or stderr contains the message
-    expect(exitCode !== 0 || stderr.includes('DEPFENDER_API_KEY')).toBe(true);
+    expect(exitCode).not.toBe(0);
+    expect(stderr).toContain('DEPFENDER_API_KEY');
   });
 
   // Skip remaining tests if no API key configured

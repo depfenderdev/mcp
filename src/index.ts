@@ -118,6 +118,12 @@ async function handleScanPackage(
 }
 
 async function main() {
+  // Fail fast if API key is missing
+  if (!process.env.DEPFENDER_API_KEY) {
+    console.error("DEPFENDER_API_KEY is required. Set it as an environment variable.");
+    process.exit(1);
+  }
+
   const server = new Server(
     {
       name: "depfender",
