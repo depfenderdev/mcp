@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question / Support
+    url: https://github.com/depfenderdev/mcp/discussions/categories/q-a
+    about: Ask questions and get help from the community
+  - name: Feature Ideas
+    url: https://github.com/depfenderdev/mcp/discussions/categories/feature-requests
+    about: Discuss feature ideas before creating a formal request
+  - name: Security Vulnerability
+    url: https://github.com/depfenderdev/mcp/security/policy
+    about: Report security vulnerabilities privately
