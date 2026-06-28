@@ -1,3 +1,4 @@
+# managed-by: github-policies
 name: Claude Code Review
 
 on:
@@ -6,7 +7,13 @@ on:
 
 jobs:
   claude-review:
+    if: github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
+    # ANTHROPIC_BASE_URL must be job-level: a `uses:` step's env block does not
+    # reach the composite action's `${{ env.* }}` context, so a step-level value
+    # never reaches the Claude SDK and the endpoint is silently ignored.
+    env:
+      ANTHROPIC_BASE_URL: ${{ secrets.ANTHROPIC_BASE_URL }}
     permissions:
       contents: read
       pull-requests: write
@@ -16,7 +23,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 1
 
@@ -31,5 +38,3 @@ jobs:
           claude_args: '--model claude-opus-4-8'
           prompt: |
             /review-pr PR NUMBER: ${{ github.event.pull_request.number }} in REPO: ${{ github.repository }}
-        env:
-          ANTHROPIC_BASE_URL: ${{ secrets.ANTHROPIC_BASE_URL }}
